@@ -1,0 +1,19 @@
+version: "3.11"
+
+services:
+  patchman:
+    image: dalenw/patchman-docker:latest
+    volumes:
+      - database:/var/lib/patchman/db
+    ports:
+      - 8000:8000
+    environment:
+      ADMIN_EMAIL: admin@example.com
+      ADMIN_USERNAME: admin
+      ADMIN_PW: password
+      TIMEZONE: "America/Denver"
+      SECRET_KEY: "random password like string (see docker file)"
+
+
+volumes:
+  database:
