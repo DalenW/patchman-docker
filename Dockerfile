@@ -21,6 +21,9 @@ RUN apt-get update && apt-get upgrade -y
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3-django python3-django-tagging python3-django-extensions python3-django-bootstrap3 python3-djangorestframework python3-debian python3-rpm python3-progressbar python3-lxml python3-defusedxml python3-requests python3-colorama python3-magic python3-humanize
 
+# realtime report processing
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python3-celery redis python3-redis python-celery-common
+
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python3-patchman patchman-client
 
 RUN pip install whitenoise
@@ -28,9 +31,6 @@ RUN pip install gunicorn
 
 # RUN DEBIAN_FRONTEND=noninteractive apt-get -y install memcached python3-pymemcache
 # RUN systemctl restart memcached
-
-# realtime report processing
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python3-celery redis python3-redis python-celery-common
 
 ADD settings.py /etc/patchman/local_settings.py
 
