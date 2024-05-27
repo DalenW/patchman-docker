@@ -1,5 +1,14 @@
 FROM ubuntu:jammy
 
+# Default ENV Variables
+ENV ADMIN_EMAIL="admin@example.com"
+ENV ADMIN_USERNAME="admin"
+ENV ADMIN_PW="password"
+ENV TIMEZONE="America/Denver"
+ENV SECRET_KEY="7dAiqF&r_^=Q_)J+uu6Vy0+vBWc(p6fV&z4d)1T99rwGytG^Pb"
+# note that the secret key is the default provided key
+
+
 # install curl
 RUN apt-get update && apt-get install -y curl
 
@@ -15,5 +24,16 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3-django python3-dja
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python3-patchman patchman-client
 
 RUN pip install whitenoise
+RUN pip install gunicorn
 
-CMD patchman-manage runserver
+# RUN DEBIAN_FRONTEND=noninteractive apt-get -y install memcached python3-pymemcache
+# RUN systemctl restart memcached
+
+ADD settings.py /etc/patchman/local_settings.py
+
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+# CMD patchman-manage runserver
