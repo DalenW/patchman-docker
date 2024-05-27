@@ -23,7 +23,7 @@ patchman-manage migrate
 echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(email='$ADMIN_EMAIL', is_superuser=True).delete(); User.objects.create_superuser('$ADMIN_USERNAME', '$ADMIN_EMAIL', '$ADMIN_PW')" | patchman-manage shell
 
 # start worker
-C_FORCE_ROOT=1 celery -b redis://redis:6379/0 -A patchman worker -l INFO -E
+C_FORCE_ROOT=1 celery -b redis://redis:6379/0 -A patchman worker -l INFO -E --detach
 
 # patchman-manage runserver
 gunicorn patchman.wsgi -b 0.0.0.0:8000
