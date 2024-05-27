@@ -45,3 +45,4 @@ RUN_GUNICORN = False
 #     }
 # }
 
+USE_ASYNC_PROCESSING = True

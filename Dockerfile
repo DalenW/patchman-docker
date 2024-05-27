@@ -29,6 +29,9 @@ RUN pip install gunicorn
 # RUN DEBIAN_FRONTEND=noninteractive apt-get -y install memcached python3-pymemcache
 # RUN systemctl restart memcached
 
+# realtime report processing
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python3-celery redis python3-redis python-celery-common
+
 ADD settings.py /etc/patchman/local_settings.py
 
 ADD entrypoint.sh /entrypoint.sh

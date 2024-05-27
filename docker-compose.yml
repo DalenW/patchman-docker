@@ -12,7 +12,7 @@ services:
       ADMIN_USERNAME: admin
       ADMIN_PW: password
       TIMEZONE: "America/Denver"
-      SECRET_KEY: "random password like string (see docker file)"
+      SECRET_KEY: "${SECRET_KEY}"
 
 
 volumes:

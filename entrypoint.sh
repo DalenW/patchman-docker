@@ -22,5 +22,8 @@ patchman-manage migrate
 # This exists because django's createsuperuser command does not allow setting password without console input
 echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(email='$ADMIN_EMAIL', is_superuser=True).delete(); User.objects.create_superuser('$ADMIN_USERNAME', '$ADMIN_EMAIL', '$ADMIN_PW')" | patchman-manage shell
 
+# start worker
+C_FORCE_ROOT=1 celery -b redis://127.0.0.1:6379/0 -A patchman worker -l INFO -E
+
 # patchman-manage runserver
 gunicorn patchman.wsgi -b 0.0.0.0:8000
