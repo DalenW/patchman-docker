@@ -3,8 +3,12 @@ version: "3.11"
 services:
   patchman:
     image: dalenw/patchman-docker:latest
+    depends_on:
+      - redis
     volumes:
       - database:/var/lib/patchman/db
+    networks:
+      - patchman-network
     ports:
       - 8000:8000
     environment:
@@ -14,6 +18,22 @@ services:
       TIMEZONE: "America/Denver"
       SECRET_KEY: "${SECRET_KEY}"
 
+  redis:
+    image: redis
+    networks:
+      - patchman-network
+    command: [ "redis-server" ]
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 30s
+      retries: 3
+
 
 volumes:
   database:
+
+networks:
+  patchman-network:
+    driver: overlay
