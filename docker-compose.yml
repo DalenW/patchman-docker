@@ -5,6 +5,25 @@ services:
     image: dalenw/patchman-docker:latest
     depends_on:
       - redis
+      - postgres
+    volumes:
+      - sqllite_db:/var/lib/patchman/db
+    networks:
+      - patchman-network
+    ports:
+      - 8000:8000
+    environment:
+      ADMIN_EMAIL: admin@example.com
+      ADMIN_USERNAME: admin
+      ADMIN_PW: password
+      TIMEZONE: "America/Denver"
+      SECRET_KEY: "${SECRET_KEY}"
+
+  worker:
+    image: dalenw/patchman-docker:latest
+    depends_on:
+      - redis
+      - postgres
     volumes:
       - database:/var/lib/patchman/db
     networks:
@@ -17,12 +36,13 @@ services:
       ADMIN_PW: password
       TIMEZONE: "America/Denver"
       SECRET_KEY: "${SECRET_KEY}"
+      WORKER: "true"
 
   redis:
     image: redis
     networks:
       - patchman-network
-    command: [ "redis-server" ]
+    command: "redis-server --port ${REDIS_PORT}"
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
@@ -30,9 +50,22 @@ services:
       timeout: 30s
       retries: 3
 
+  postgres:
+    image: postgres:12
+    networks:
+      - patchman-network
+    environment:
+      POSTGRES_DB: "${DATABASE_USER}"
+      POSTGRES_USER: "${DATABASE_USER}"
+      POSTGRES_PASSWORD: "${DATABASE_PASSWORD}"
+      PGPORT: "${DATABASE_PORT}"
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+
 
 volumes:
-  database:
+  sqllite_db:
+  postgres_db:
 
 networks:
   patchman-network:

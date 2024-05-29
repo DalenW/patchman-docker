@@ -1,12 +1,24 @@
 FROM ubuntu:jammy
 
+ENV WORKER="false"
+
 # Default ENV Variables
 ENV ADMIN_EMAIL="admin@example.com"
 ENV ADMIN_USERNAME="admin"
 ENV ADMIN_PW="password"
+ENV PORT="8000"
 ENV TIMEZONE="America/Denver"
 ENV SECRET_KEY="7dAiqF&r_^=Q_)J+uu6Vy0+vBWc(p6fV&z4d)1T99rwGytG^Pb"
 # note that the secret key is the default provided key
+
+ENV DATABASE_TYPE="sqllite"
+ENV DATABASE_USER="patchman"
+ENV DATABASE_PASSWORD="password"
+ENV DATABASE_HOST="postgres"
+ENV DATABASE_PORT="5432"
+
+ENV REDIS_HOST="redis"
+ENV REDIS_PORT="6379"
 
 
 # install curl
@@ -24,6 +36,13 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3-django python3-dja
 # realtime report processing
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python3-celery redis python3-redis python-celery-common
 
+# postgresql
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install postgresql python3-psycopg2
+
+# mysql
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install default-mysql-server python3-mysqldb
+
+# install patchman last
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python3-patchman patchman-client
 
 RUN pip install whitenoise

@@ -3,15 +3,47 @@
 DEBUG = False
 
 ADMINS = (
-    ('{ADMIN_USERNAME}', '{ADMIN_EMAIL}'),
+  ('{ADMIN_USERNAME}', '{ADMIN_EMAIL}'),
 )
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/var/lib/patchman/db/patchman.db',
-    }
+database = {}
+database_type = ('{DATABASE_TYPE}')
+
+database = {
+  'default': {
+      'ENGINE': 'django.db.backends.sqlite3',
+      'NAME': '/var/lib/patchman/db/patchman.db',
+  }
 }
+
+if database_type.upper() == 'POSTGRESQL':
+  database = {
+    'default': {
+      'ENGINE': 'django.db.backends.postgresql_psycopg2',
+      'NAME': '{DATABASE_USER}',
+      'USER': '{DATABASE_USER}',
+      'PASSWORD': '{DATABASE_PASSWORD}',
+      'HOST': '{DATABASE_HOST}',
+      'PORT': '{DATABASE_PORT}',
+        'CHARSET' : 'utf8'
+    }
+  }
+  
+if database_type.upper() == 'MYSQL':
+  database = {
+   'default': {
+       'ENGINE': 'django.db.backends.mysql',
+       'NAME': '{DATABASE_USER}',
+       'USER': '{DATABASE_USER}',
+       'PASSWORD': '{DATABASE_PASSWORD}',
+       'HOST': '{DATABASE_HOST}',
+       'PORT': '{DATABASE_PORT}',
+       'STORAGE_ENGINE': 'INNODB',
+       'CHARSET' : 'utf8'
+   }
+}
+
+DATABASES = database
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
