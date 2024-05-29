@@ -31,6 +31,8 @@ RUN curl -sS https://repo.openbytes.ie/openbytes.gpg > /usr/share/keyrings/openb
 
 RUN apt-get update && apt-get upgrade -y
 
+RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y tzdata
+
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3-django python3-django-tagging python3-django-extensions python3-django-bootstrap3 python3-djangorestframework python3-debian python3-rpm python3-progressbar python3-lxml python3-defusedxml python3-requests python3-colorama python3-magic python3-humanize
 
 # realtime report processing

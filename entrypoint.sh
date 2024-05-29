@@ -19,12 +19,18 @@ replace_envs() {
 
 start_worker() {
   # Start the worker
+
+  echo "Starting worker"
+
   # C_FORCE_ROOT=1 celery -b redis://redis:6379/0 -A patchman worker -l INFO -E --detach
   C_FORCE_ROOT=1 celery -b redis://$REDIS_HOST:$REDIS_PORT/0 -A patchman worker -l INFO -E
 }
 
 start_server() {
   # Start the server
+
+  echo "Starting server on port $PORT"
+
   # patchman-manage runserver
   # gunicorn patchman.wsgi -b 0.0.0.0:8000
   gunicorn patchman.wsgi -b 0.0.0.0:$PORT
@@ -44,7 +50,7 @@ set_db_standards() {
 
   export PGPASSWORD=$DATABASE_PASSWORD
 
-  if [ "$DATABASE_TYPE" != "postgres" ]; then
+  if [ "$DATABASE_TYPE" == "postgresql" ]; then
     # ALTER ROLE patchman SET client_encoding TO 'utf8';
     psql -h $DATABASE_HOST -p $DATABASE_PORT -U $DATABASE_USER -d $DATABASE_USER -c "ALTER ROLE $DATABASE_USER SET client_encoding TO 'utf8';"
 
@@ -61,7 +67,7 @@ set_db_standards() {
     psql -h $DATABASE_HOST -p $DATABASE_PORT -U $DATABASE_USER -d $DATABASE_USER -c "GRANT ALL ON SCHEMA public TO $DATABASE_USER;"
   fi
 
-  if [ "$DATABASE_TYPE" != "mysql" ]; then
+  if [ "$DATABASE_TYPE" == "mysql" ]; then
     # ALTER DATABASE patchman CHARACTER SET utf8;
     mysql -h $DATABASE_HOST -P $DATABASE_PORT -u $DATABASE_USER -p$DATABASE_PASSWORD -e "ALTER DATABASE $DATABASE_USER CHARACTER SET utf8;"
 
