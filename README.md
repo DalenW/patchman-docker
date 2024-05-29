@@ -33,7 +33,7 @@ Note that if you use Postgres or MySQL, it is assumed that the database containe
 | `PORT`                   | `8000`            |
 | `TIMEZONE`               | `America/Denver`  |
 | `SECRET_KEY`             | `random password like string (see docker file)` |
-| `DATABASE_TYPE`          | `sqllite,postgres, mysql (default is sqlite)`         |
+| `DATABASE_TYPE`          | `sqllite,postgresql,mysql (default is sqlite)`         |
 | `DATABASE_USER`          | `patchman (will also be the daatabase name)`        |
 | `DATABASE_PASSWORD`      | `password`        |
 | `DATABASE_HOST`          | `postgres`        |

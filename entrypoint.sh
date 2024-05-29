@@ -42,6 +42,8 @@ migrate_db() {
 set_db_standards() {
   # why don't we create the database? because it's assumed that the containers will create the default database in the name of the user, which is the database name
 
+  export PGPASSWORD=$DATABASE_PASSWORD
+
   if [ "$DATABASE_TYPE" != "postgres" ]; then
     # ALTER ROLE patchman SET client_encoding TO 'utf8';
     psql -h $DATABASE_HOST -p $DATABASE_PORT -U $DATABASE_USER -d $DATABASE_USER -c "ALTER ROLE $DATABASE_USER SET client_encoding TO 'utf8';"

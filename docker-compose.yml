@@ -51,7 +51,7 @@ services:
       retries: 3
 
   postgres:
-    image: postgres:12
+    image: postgres:16
     networks:
       - patchman-network
     environment:
@@ -61,6 +61,11 @@ services:
       PGPORT: "${DATABASE_PORT}"
     volumes:
       - postgres_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 
 volumes:
